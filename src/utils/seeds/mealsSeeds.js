@@ -1,14 +1,15 @@
-const { mongoose } = require("mongoose");
-const Meal = require("../../api/centers/centers.model");
+const mongoose = require("mongoose");
+const Meal = require("../../api/meals/meals.model");
 const { DB_URL } = require("../database/db");
 
 const meals = [
   {
-    name: "Macarrones a la boloñesa",
-    description: "con tomate son muy buenos",
-    img: "",
-    duration: "20 minutos",
-    ingredients: "tomate, macarrones, huevo, queso",
+    name: "Macarrones",
+    type: [{ name: "vegano" }],
+    description: "macarrones veganos con verduras del tiempo",
+    img: "imagen-1",
+    duration: 20,
+    ingredients: [{ name: "Ingrediente 1" }, { name: "Ingrediente 2" }],
   },
 ];
 
@@ -29,8 +30,10 @@ mongoose
     console.log("[seed]: Error eliminando la colección -->", error)
   )
   .then(async () => {
-    await Center.insertMany(meals);
-    console.log(`[seed]: ${meals.length} nuevos centros añadidos con éxito`);
+    await Meal.insertMany(meals);
+    console.log(
+      `[seed]: ${meals.length} nuevas comidas añadidos con éxito nyaaaaaam`
+    );
   })
   .catch((error) => console.log("[seed]: Error añadiendo los centros", error))
   .finally(() => mongoose.disconnect());

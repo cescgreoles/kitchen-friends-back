@@ -97,4 +97,37 @@ router.put(
   }
 );
 
+// Ruta para agregar un nuevo tipo de comida a una comida existente
+router.post("/meals/:mealId/types", async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    const meal = await Meal.findById(req.params.mealId);
+    if (!meal) {
+      return res.status(404).json({ message: "Comida no encontrada" });
+    }
+    meal.type = { name, description };
+    const updatedMeal = await meal.save();
+    res.status(201).json(updatedMeal);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Ruta para agregar un nuevo ingrediente a una comida existente
+router.post("/meals/:mealId/ingredients", async (req, res) => {
+  try {
+    const { name, quantity } = req.body;
+    const meal = await Meal.findById(req.params.mealId);
+    if (!meal) {
+      return res.status(404).json({ message: "Comida no encontrada" });
+    }
+    const newIngredient = { name, quantity };
+    meal.ingredients.push(newIngredient);
+    const updatedMeal = await meal.save();
+    res.status(201).json(updatedMeal);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 module.exports = router;
