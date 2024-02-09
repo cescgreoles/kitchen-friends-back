@@ -34,7 +34,7 @@ const isAdmin = async (req, res, next) => {
       req.user = userLogged;
       next();
     } else {
-        return next("No eres administrador");
+      return next("No eres administrador");
     }
   } catch (error) {
     return next("Error");
@@ -42,4 +42,3 @@ const isAdmin = async (req, res, next) => {
 };
 
 module.exports = { isAuth, isAdmin };
-

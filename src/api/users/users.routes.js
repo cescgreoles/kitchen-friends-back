@@ -42,16 +42,29 @@ router.post("/logout", async (req, res) => {
 
 router.post("/create", async (req, res) => {
   try {
-    const user = req.body;
-    const newUser = new User(user);
+    const { name, email, password, code } = req.body;
+
+    // Verificar si el código proporcionado coincide con el código fijo
+    const fixedCode = "acces-menjars";
+    if (code !== fixedCode) {
+      return res.status(400).json({ message: "Código de registro incorrecto" });
+    }
+
+    // Crear el nuevo usuario
+    const newUser = new User({ name, email, password });
+
     if (newUser.rol === "user") {
       const created = await newUser.save();
       return res.status(201).json(created);
     } else {
-      return res.status(500).json("No puedes crear cuenta de admin");
+      return res
+        .status(400)
+        .json({ message: "No puedes crear una cuenta de administrador" });
     }
   } catch (error) {
-    return res.status(500).json("Error al crear el usuario");
+    return res
+      .status(500)
+      .json({ message: "Error al crear el usuario", error: error.message });
   }
 });
 
@@ -59,7 +72,9 @@ router.delete("/delete/:id", [isAdmin], async (req, res, next) => {
   try {
     const id = req.params.id;
     const userToDelete = await User.findByIdAndDelete(id);
-    return res.status(200).json("Se ha conseguido borrar el usuario");
+    return res
+      .status(200)
+      .json({ message: "Se ha conseguido borrar el usuario" });
   } catch (error) {
     return next(error);
   }

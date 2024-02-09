@@ -8,11 +8,6 @@ const userSchema = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true },
-    img: {
-      type: String,
-      required: true,
-      default: "https://cdn-icons-png.flaticon.com/512/74/74472.png",
-    },
     rol: { type: String, default: "user" },
   },
   {
@@ -20,7 +15,13 @@ const userSchema = new Schema(
   }
 );
 
+// Modificamos el prehook 'save' para hashear la contraseña solo si es nueva o ha sido modificada
 userSchema.pre("save", function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+
+  // Hashear la contraseña antes de guardar el usuario
   this.password = bcrypt.hashSync(this.password, 10);
   next();
 });

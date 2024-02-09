@@ -36,7 +36,7 @@ router.get("/getbyname/:name", async (req, res, next) => {
 
 router.post(
   "/create",
-  [isAdmin],
+
   upload.single("img"),
   async (req, res, next) => {
     try {
@@ -53,7 +53,7 @@ router.post(
   }
 );
 
-router.delete("/delete/:id", [isAdmin], async (req, res, next) => {
+router.delete("/delete/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
     const meal = await Meal.findById(id);
@@ -69,33 +69,28 @@ router.delete("/delete/:id", [isAdmin], async (req, res, next) => {
   }
 });
 
-router.put(
-  "/edit/:id",
-  [isAdmin],
-  upload.single("img"),
-  async (req, res, next) => {
-    try {
-      const id = req.params.id;
-      const meal = req.body;
-      const mealOld = await Meal.findById(id);
-      const mealModify = new Center(meal);
-      if (req.file) {
-        if (mealOld.img) {
-          deleteFile(mealOld.img);
-        }
-        mealModify.img = req.file.path;
+router.put("/edit/:id", upload.single("img"), async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const meal = req.body;
+    const mealOld = await Meal.findById(id);
+    const mealModify = new Meal(meal);
+    if (req.file) {
+      if (mealOld.img) {
+        deleteFile(mealOld.img);
       }
-      mealModify._id = id;
-      const mealUpdated = await Meal.findByIdAndUpdate(id, mealModify);
-      return res.status(200).json({
-        mensaje: "Se ha conseguido editar la receta",
-        mealModificado: mealUpdated,
-      });
-    } catch (error) {
-      return next(error);
+      mealModify.img = req.file.path;
     }
+    mealModify._id = id;
+    const mealUpdated = await Meal.findByIdAndUpdate(id, mealModify);
+    return res.status(200).json({
+      mensaje: "Se ha conseguido editar la receta",
+      mealModificado: mealUpdated,
+    });
+  } catch (error) {
+    return next(error);
   }
-);
+});
 
 // Ruta para agregar un nuevo tipo de comida a una comida existente
 router.post("/meals/:mealId/types", async (req, res) => {
