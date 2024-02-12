@@ -5,6 +5,9 @@ const bcrypt = require("bcrypt");
 const { generateSign } = require("../../utils/jwt/jwt");
 const { isAuth, isAdmin } = require("../../middlewares/auth");
 
+// Rutas para la gestión de usuarios
+
+// Obtener todos los usuarios
 router.get("/", async (req, res) => {
   try {
     const allUsers = await User.find();
@@ -14,39 +17,14 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
-  try {
-    const userDB = await User.findOne({ email: req.body.email });
-    if (!userDB) {
-      return res.status(404).json("No existe el usuario");
-    }
-    if (bcrypt.compareSync(req.body.password, userDB.password)) {
-      const token = generateSign(userDB._id, userDB.email);
-      return res.status(200).json({ token, userDB });
-    } else {
-      return res.status(200).json("La contraseña es incorrecta");
-    }
-  } catch (error) {
-    return res.status(500).json("Error al loguear el usuario");
-  }
-});
-
-router.post("/logout", async (req, res) => {
-  try {
-    const token = null;
-    return res.status(200).json(token);
-  } catch (error) {
-    return res.status(500).json(error);
-  }
-});
-
+// Registro de usuario
 router.post("/create", async (req, res) => {
   try {
-    const { name, email, password, code } = req.body;
+    const { name, email, password, accessCode } = req.body;
 
     // Verificar si el código proporcionado coincide con el código fijo
     const fixedCode = "acces-menjars";
-    if (code !== fixedCode) {
+    if (accessCode !== fixedCode) {
       return res.status(400).json({ message: "Código de registro incorrecto" });
     }
 
@@ -68,37 +46,36 @@ router.post("/create", async (req, res) => {
   }
 });
 
-router.delete("/delete/:id", [isAdmin], async (req, res, next) => {
+// Inicio de sesión de usuario
+router.post("/login", async (req, res) => {
   try {
-    const id = req.params.id;
-    const userToDelete = await User.findByIdAndDelete(id);
-    return res
-      .status(200)
-      .json({ message: "Se ha conseguido borrar el usuario" });
+    const { email, password } = req.body;
+    const userDB = await User.findOne({ email });
+
+    if (!userDB) {
+      return res.status(404).json("No existe el usuario");
+    }
+    if (bcrypt.compareSync(password, userDB.password)) {
+      const token = generateSign(userDB._id, userDB.email);
+      return res.status(200).json({ token, userDB });
+    } else {
+      return res.status(400).json("La contraseña es incorrecta");
+    }
   } catch (error) {
-    return next(error);
+    return res.status(500).json("Error al loguear el usuario");
   }
 });
 
-router.put("/edit/:id", [isAdmin], async (req, res, next) => {
+// Cerrar sesión de usuario
+router.post("/logout", async (req, res) => {
   try {
-    const id = req.params.id;
-    const user = req.body;
-    const userModify = new User(user);
-    userModify._id = id;
-    await User.findByIdAndUpdate(id, userModify);
-    return res.status(200).json("Se ha conseguido editar el usuario");
-  } catch (error) {
-    return next(error);
-  }
-});
-
-router.post("/checksession", [isAuth], (req, res, next) => {
-  try {
-    return res.status(200).json(req.user);
+    const token = null;
+    return res.status(200).json(token);
   } catch (error) {
     return res.status(500).json(error);
   }
 });
+
+// Otras rutas de gestión de usuarios (editar, eliminar, etc.)
 
 module.exports = router;
