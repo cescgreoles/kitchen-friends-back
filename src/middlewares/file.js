@@ -5,7 +5,7 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "meals-project", // Añadir nombre de la carpeta a crear en cloudinary
+    folder: "recetas",
     allowedFormats: ["jpg", "png", "jpeg", "gif"],
   },
 });

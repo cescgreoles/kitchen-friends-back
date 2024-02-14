@@ -24,6 +24,19 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+router.get("/meals/:id", async (req, res, next) => {
+  try {
+    const mealId = req.params.id;
+    const meal = await Meal.findById(mealId);
+    if (!meal) {
+      return res.status(404).json({ message: "Meal not found" });
+    }
+    return res.status(200).json(meal);
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get("/getbyname/:name", async (req, res, next) => {
   try {
     const name = req.params.name;
@@ -41,11 +54,12 @@ router.post(
   async (req, res, next) => {
     try {
       const meal = req.body;
-      if (req.file) {
-        meal.img = req.file.path;
-      }
+      // if (req.file) {
+      //   meal.img = req.file.path;
+      // }
       const newMeal = new Meal(meal);
       const created = await newMeal.save();
+
       return res.status(201).json(created);
     } catch (error) {
       return next(error);
