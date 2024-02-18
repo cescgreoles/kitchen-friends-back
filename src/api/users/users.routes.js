@@ -20,11 +20,11 @@ router.get("/", async (req, res) => {
 // Registro de usuario
 router.post("/create", async (req, res) => {
   try {
-    const { name, email, password, accessCode } = req.body;
+    const { name, email, password, code } = req.body;
 
     // Verificar si el código proporcionado coincide con el código fijo
     const fixedCode = "acces-menjars";
-    if (accessCode !== fixedCode) {
+    if (code !== fixedCode) {
       return res.status(400).json({ message: "Código de registro incorrecto" });
     }
 
