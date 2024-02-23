@@ -5,7 +5,15 @@ const bcrypt = require("bcrypt");
 const { generateSign } = require("../../utils/jwt/jwt");
 const { isAuth, isAdmin } = require("../../middlewares/auth");
 
-// Rutas para la gestión de usuarios
+router.get("/profile", isAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json(user);
+  } catch (error) {
+    console.error("Error al obtener el perfil del usuario:", error);
+    res.status(500).send("Error del servidor");
+  }
+});
 
 // Obtener todos los usuarios
 router.get("/", async (req, res) => {
@@ -21,12 +29,6 @@ router.get("/", async (req, res) => {
 router.post("/create", async (req, res) => {
   try {
     const { name, email, password, code } = req.body;
-
-    // Verificar si el código proporcionado coincide con el código fijo
-    const fixedCode = "acces-menjars";
-    if (code !== fixedCode) {
-      return res.status(400).json({ message: "Código de registro incorrecto" });
-    }
 
     // Crear el nuevo usuario
     const newUser = new User({ name, email, password });
