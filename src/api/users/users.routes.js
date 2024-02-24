@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const { generateSign } = require("../../utils/jwt/jwt");
 const { isAuth, isAdmin } = require("../../middlewares/auth");
 
-router.get("/profile", isAuth, async (req, res) => {
+router.get("/profile", [isAuth], async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
     res.json(user);

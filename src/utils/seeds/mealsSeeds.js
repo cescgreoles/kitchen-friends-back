@@ -1,43 +1,57 @@
 const mongoose = require("mongoose");
 const Meal = require("../../api/meals/meals.model");
+const Ingredient = require("../../api/ingredients/ingredients.model");
 const { DB_URL } = require("../database/db");
 
-const meals = [
-  {
-    name: "Macarrones",
-    type: [{ name: "vegano" }],
-    description: "macarrones veganos con verduras del tiempo",
-    img: "imagen-1",
-    duration: 20,
-    ingredients: [{ name: "Ingrediente 1" }, { name: "Ingrediente 2" }],
-  },
-];
+const seedDatabase = async () => {
+  try {
+    const db = await mongoose.connect(DB_URL);
 
-mongoose
-  .connect(DB_URL)
-  .then(async () => {
-    const allMeals = await Meal.find().lean();
-
-    if (!allMeals.length) {
-      console.log("[seed]: No se encuentran las comidas, continuo...");
-    } else {
-      console.log(`[seed]: Encontrados ${allMeals.length} comidas.`);
-      await Meal.collection.drop();
-      console.log("[seed]: Colección Comidas eliminada correctamente");
+    // Delete all ingredients
+    const allIngredients = await Ingredient.find().lean();
+    if (allIngredients.length) {
+      await Ingredient.collection.drop();
+      console.log("Ingredients Deleted");
     }
-  })
-  .catch((error) =>
-    console.log("[seed]: Error eliminando la colección -->", error)
-  )
-  .then(async () => {
+
+    // Add new ingredients
+    const ingredients = [
+      { name: "carn" },
+      { name: "bechamel" },
+      { name: "pasta" },
+    ];
+
+    const newIngredients = await Ingredient.insertMany(ingredients);
+    console.log("Ingredients Created");
+
+    // Delete all meals
+    const allMeals = await Meal.find().lean();
+    if (allMeals.length) {
+      await Meal.collection.drop();
+      console.log("Meals Deleted");
+    }
+
+    const meals = [
+      {
+        name: "Macarrones",
+        type: "pasta",
+        description: "macarrones veganos con verduras del tiempo",
+        img: "imagen-1",
+        duration: 20,
+        ingredients: newIngredients.map((ingredient) => ingredient._id),
+        cook: "cesc",
+      },
+    ];
     await Meal.insertMany(meals);
-    console.log(
-      `[seed]: ${meals.length} nuevas comidas añadidos con éxito nyaaaaaam`
-    );
-  })
-  .catch((error) => console.log("[seed]: Error añadiendo los centros", error))
-  .finally(() => mongoose.disconnect());
+    console.log("Meals Created");
+
+    await db.disconnect();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+seedDatabase();
 
 const mealLog = "Comidas Listos!!";
-
 module.exports = mealLog;

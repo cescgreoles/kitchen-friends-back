@@ -7,7 +7,7 @@ const { deleteFile } = require("../../middlewares/deleteFile");
 
 router.get("/", async (req, res, next) => {
   try {
-    const allMeals = await Meal.find();
+    const allMeals = await Meal.find().populate("ingredients");
     return res.status(200).json(allMeals);
   } catch (error) {
     return next(error);
