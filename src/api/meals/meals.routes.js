@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
-    const mealToFind = await Meal.findById(id);
+    const mealToFind = await Meal.findById(id).populate("ingredients");
     return res.status(200).json(mealToFind);
   } catch (error) {
     return next(error);
@@ -27,7 +27,7 @@ router.get("/:id", async (req, res, next) => {
 router.get("/meals/:id", async (req, res, next) => {
   try {
     const mealId = req.params.id;
-    const meal = await Meal.findById(mealId);
+    const meal = await Meal.findById(mealId).populate("ingredients");
     if (!meal) {
       return res.status(404).json({ message: "Meal not found" });
     }
@@ -40,7 +40,9 @@ router.get("/meals/:id", async (req, res, next) => {
 router.get("/getbyname/:name", async (req, res, next) => {
   try {
     const name = req.params.name;
-    const mealToFind = await Meal.findOne({ name: name });
+    const mealToFind = await Meal.findOne({ name: name }).populate(
+      "ingredients"
+    );
     return res.status(200).json(mealToFind);
   } catch (error) {
     return next(error);
@@ -65,9 +67,9 @@ router.put("/edit/:id", upload.single("img"), async (req, res, next) => {
   try {
     const id = req.params.id;
     const mealData = req.body;
-    const mealOld = await Meal.findById(id);
+    console.log(JSON.stringify(mealData));
+    const mealOld = await Meal.findById(id).populate("ingredients");
     const mealModify = { ...mealOld._doc, ...mealData };
-
     if (req.file) {
       if (mealOld.img) {
         deleteFile(mealOld.img);
