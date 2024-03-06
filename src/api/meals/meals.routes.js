@@ -7,7 +7,10 @@ const { deleteFile } = require("../../middlewares/deleteFile");
 
 router.get("/", async (req, res, next) => {
   try {
-    const allMeals = await Meal.find().populate("ingredients");
+    const allMeals = await Meal.find()
+      .populate("ingredients")
+      .populate("tipos")
+      .populate("apats");
     return res.status(200).json(allMeals);
   } catch (error) {
     return next(error);
@@ -17,7 +20,10 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
-    const mealToFind = await Meal.findById(id).populate("ingredients");
+    const mealToFind = await Meal.findById(id)
+      .populate("ingredients")
+      .populate("tipos")
+      .populate("apats");
     return res.status(200).json(mealToFind);
   } catch (error) {
     return next(error);
@@ -27,7 +33,10 @@ router.get("/:id", async (req, res, next) => {
 router.get("/meals/:id", async (req, res, next) => {
   try {
     const mealId = req.params.id;
-    const meal = await Meal.findById(mealId).populate("ingredients");
+    const meal = await Meal.findById(mealId)
+      .populate("ingredients")
+      .populate("tipos")
+      .populate("apats");
     if (!meal) {
       return res.status(404).json({ message: "Meal not found" });
     }
@@ -40,9 +49,10 @@ router.get("/meals/:id", async (req, res, next) => {
 router.get("/getbyname/:name", async (req, res, next) => {
   try {
     const name = req.params.name;
-    const mealToFind = await Meal.findOne({ name: name }).populate(
-      "ingredients"
-    );
+    const mealToFind = await Meal.findOne({ name: name })
+      .populate("ingredients")
+      .populate("tipos")
+      .populate("apats");
     return res.status(200).json(mealToFind);
   } catch (error) {
     return next(error);
@@ -68,7 +78,10 @@ router.put("/edit/:id", upload.single("img"), async (req, res, next) => {
     const id = req.params.id;
     const mealData = req.body;
     console.log(JSON.stringify(mealData));
-    const mealOld = await Meal.findById(id).populate("ingredients");
+    const mealOld = await Meal.findById(id)
+      .populate("ingredients")
+      .populate("tipos")
+      .populate("apats");
     const mealModify = { ...mealOld._doc, ...mealData };
     if (req.file) {
       if (mealOld.img) {
