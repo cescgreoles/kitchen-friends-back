@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 const mealsSchema = new Schema(
   {
     name: { type: String, required: true, trim: true },
-    tipo: [{ type: Schema.Types.ObjectId, ref: "Tipo" }],
+    tipos: [{ type: Schema.Types.ObjectId, ref: "Tipo" }],
     description: { type: String, required: true, trim: true },
     img: { type: String, required: true, trim: true },
     apats: [{ type: Schema.Types.ObjectId, ref: "Apat" }],

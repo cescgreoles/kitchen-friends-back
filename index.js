@@ -3,6 +3,8 @@ const indexRoutes = require("./src/api/index/index.routes.js");
 const mealsRoutes = require("./src/api/meals/meals.routes");
 const usersRoutes = require("./src/api/users/users.routes");
 const ingredientsRoutes = require("./src/api/ingredients/ingredients.routes");
+const tiposRoutes = require("./src/api/tipos/tipos.routes");
+const apatsRoutes = require("./src/api/apats/apats.routes");
 const cors = require("cors");
 require("dotenv").config();
 const db = require("./src/utils/database/db");
@@ -31,6 +33,8 @@ server.use(express.urlencoded({ extended: false }));
 server.use("/", indexRoutes);
 server.use("/meals", mealsRoutes);
 server.use("/ingredients", ingredientsRoutes);
+server.use("/tipos", tiposRoutes);
+server.use("/apats", apatsRoutes);
 server.use("/users", usersRoutes);
 
 server.use("", (req, res) => {

@@ -1,61 +1,3 @@
-// const mongoose = require("mongoose");
-// const Meal = require("../../api/meals/meals.model");
-// const Ingredient = require("../../api/ingredients/ingredients.model");
-// const { DB_URL } = require("../database/db");
-
-// const seedDatabase = async () => {
-//   try {
-//     const db = await mongoose.connect(DB_URL);
-
-//     // Delete all ingredients
-//     const allIngredients = await Ingredient.find().lean();
-//     if (allIngredients.length) {
-//       await Ingredient.collection.drop();
-//       console.log("Ingredients Deleted");
-//     }
-
-//     // Add new ingredients
-//     const ingredients = [
-//       { name: "carn" },
-//       { name: "bechamel" },
-//       { name: "pasta" },
-//     ];
-
-//     const newIngredients = await Ingredient.insertMany(ingredients);
-//     console.log("Ingredients Created");
-
-//     // Delete all meals
-//     const allMeals = await Meal.find().lean();
-//     if (allMeals.length) {
-//       await Meal.collection.drop();
-//       console.log("Meals Deleted");
-//     }
-
-//     const meals = [
-//       {
-//         name: "Macarrones",
-//         type: "pasta",
-//         description: "macarrones veganos con verduras del tiempo",
-//         img: "imagen-1",
-//         duration: 20,
-//         ingredients: newIngredients.map((ingredient) => ingredient._id),
-//         cook: "cesc",
-//       },
-//     ];
-//     await Meal.insertMany(meals);
-//     console.log("Meals Created");
-
-//     await db.disconnect();
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// seedDatabase();
-
-// const mealLog = "Comidas Listos!!";
-// module.exports = mealLog;
-
 const mongoose = require("mongoose");
 const Meal = require("../../api/meals/meals.model");
 const Ingredient = require("../../api/ingredients/ingredients.model");
@@ -76,10 +18,146 @@ const seedDatabase = async () => {
 
     // Agregar nuevos ingredientes
     const ingredients = [
-      { name: "carn" },
-      { name: "bechamel" },
-      { name: "pasta" },
+      { name: "Aceite de oliva" },
+      { name: "Aceite vegetal" },
+      { name: "Aceitunas" },
+      { name: "Agua" },
+      { name: "Ajo" },
+      { name: "Albaricoque" },
+      { name: "Alcachofas" },
+      { name: "Almendras" },
+      { name: "Apio" },
+      { name: "Arroz" },
+      { name: "Arándanos" },
+      { name: "Azúcar" },
+      { name: "Azúcar glas" },
+      { name: "Azúcar moreno" },
+      { name: "Batatas" },
+      { name: "Batidos" },
+      { name: "Bebidas" },
+      { name: "Bebidas alcohólicas" },
+      { name: "Berros" },
+      { name: "Bebidas" },
+      { name: "Bebidas alcohólicas" },
+      { name: "Brócoli" },
+      { name: "Cacao en polvo" },
+      { name: "Café" },
+      { name: "Calabacines" },
+      { name: "Calabaza" },
+      { name: "Caldos" },
+      { name: "Camarones" },
+      { name: "Canela" },
+      { name: "Carne de res" },
+      { name: "Carnes" },
+      { name: "Cebolla" },
+      { name: "Cerezas" },
+      { name: "Cerdo" },
+      { name: "Cereales" },
+      { name: "Cereales integrales" },
+      { name: "Champiñones" },
+      { name: "Chocolate" },
+      { name: "Chocolate blanco" },
+      { name: "Chocolate con leche" },
+      { name: "Chocolate negro" },
+      { name: "Ciruela" },
+      { name: "Coco" },
+      { name: "Coliflor" },
+      { name: "Condimentos" },
+      { name: "Conservas" },
+      { name: "Crema" },
+      { name: "Cócteles" },
+      { name: "Dátiles" },
+      { name: "Encurtidos" },
+      { name: "Escarola" },
+      { name: "Especias" },
+      { name: "Espárragos" },
+      { name: "Espinacas" },
+      { name: "Especias" },
+      { name: "Frambuesas" },
+      { name: "Frutas" },
+      { name: "Frutas deshidratadas" },
+      { name: "Frutas en conserva" },
+      { name: "Frutas secas" },
+      { name: "Frutas tropicales" },
+      { name: "Frutos del bosque" },
+      { name: "Frutos rojos" },
+      { name: "Frutos secos" },
+      { name: "Galletas" },
+      { name: "Guisantes" },
+      { name: "Harina" },
+      { name: "Harina de maíz" },
+      { name: "Harina de trigo" },
+      { name: "Harina integral" },
+      { name: "Hierbas aromáticas" },
+      { name: "Hortalizas" },
+      { name: "Huevos" },
+      { name: "Infusiones" },
+      { name: "Judías verdes" },
+      { name: "Jarabe de arce" },
+      { name: "Ketchup" },
+      { name: "Kiwi" },
+      { name: "Leche" },
+      { name: "Lechuga" },
+      { name: "Licores" },
+      { name: "Limones" },
+      { name: "Mango" },
+      { name: "Manzanas" },
+      { name: "Mantequilla" },
+      { name: "Mayonesa" },
+      { name: "Melocotón" },
+      { name: "Melón" },
+      { name: "Miel" },
+      { name: "Mostaza" },
+      { name: "Naranjas" },
+      { name: "Nata" },
+      { name: "Nueces" },
+      { name: "Pasta" },
+      { name: "Pasta" },
+      { name: "Pepinos" },
+      { name: "Pasas" },
+      { name: "Pimientos" },
+      { name: "Piña" },
+      { name: "Pipas de girasol" },
+      { name: "Pescado" },
+      { name: "Plátanos" },
+      { name: "Platos principales" },
+      { name: "Pollo" },
+      { name: "Postres" },
+      { name: "Pimienta" },
+      { name: "Puerros" },
+      { name: "Pimientos" },
+      { name: "Quinoa" },
+      { name: "Queso" },
+      { name: "Remolachas" },
+      { name: "Rúcula" },
+      { name: "Sal" },
+      { name: "Salsa Alfredo" },
+      { name: "Salsa de soja" },
+      { name: "Salsa de tomate" },
+      { name: "Salsa pesto" },
+      { name: "Salsa teriyaki" },
+      { name: "Salsa Worcestershire" },
+      { name: "Sandía" },
+      { name: "Sándwiches" },
+      { name: "Sopas" },
+      { name: "Snacks" },
+      { name: "Stevia" },
+      { name: "Té" },
+      { name: "Tortillas" },
+      { name: "Tomates" },
+      { name: "Tofu" },
+      { name: "Tomate" },
+      { name: "Uvas" },
+      { name: "Vegetales" },
+      { name: "Vegetales en conserva" },
+      { name: "Vinagre balsámico" },
+      { name: "Vinagre de vino" },
+      { name: "Vino" },
+      { name: "Yogur" },
+      { name: "Zanahorias" },
+      { name: "Zumos" },
     ];
+
     const newIngredients = await Ingredient.insertMany(ingredients);
     console.log("Ingredients Created");
 
